@@ -15,15 +15,15 @@ class App extends Component {
       {id: nanoid(), name: 'Annie Copeland', number: '227-91-26'},
     ],
     filter: '',
-    name: '',
-    number: ''
+    // name: '',
+    // number: ''
   }
 
   render() {
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm/>
+        <ContactForm />
 
         <h2>Contacts</h2>
         <Filter/>
