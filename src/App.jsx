@@ -19,15 +19,58 @@ class App extends Component {
     // number: ''
   }
 
+  formSubmitHandler = data => {
+    this.repeatControl(data);
+  };
+
+  repeatControl = data => {
+    let nameArray = [];
+    nameArray = this.state.contacts.map(cur => cur.name);
+    if (!nameArray.includes(data.name)) {
+      let arrayCont = [];
+      arrayCont = [
+        ...this.state.contacts,
+        { id: nanoid(), name: data.name, number: data.number },
+      ];
+      return this.setState({ ...this.state, contacts: arrayCont });
+    } else {
+      alert(`${data.name} is already in contacts`);
+    }
+  };
+  
+  elementDelete = (arr, idContact) => {
+    let newArr = arr.filter(elem => elem.id !== idContact);
+    return newArr;
+  };
+
+  deleteContactFromContactList = idContact => {
+    let newArrAfterDel = this.elementDelete(this.state.contacts, idContact);
+    this.setState({
+      ...this.state,
+      contacts: [...newArrAfterDel],
+    });
+  };
+
+  setFilterToState = filterData => {
+    this.setState({ ...this.state, filter: `${filterData}` });
+  };
+
+  filterArr = fArr => {
+    let newArr = fArr.filter(cur =>
+      cur.name.toUpperCase().includes(this.state.filter),
+    );
+    return newArr;
+  };
+ 
   render() {
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm />
+        <ContactForm onSubmitData={this.formSubmitHandler} />
 
         <h2>Contacts</h2>
-        <Filter/>
-        <ContactList contacts={this.state.contacts}/>
+        <Filter setFilterToState={this.setFilterToState}/>
+        <ContactList contacts={this.filterArr(this.state.contacts)} del={this.deleteContactFromContactList}/>
       </div>
     );
   }
